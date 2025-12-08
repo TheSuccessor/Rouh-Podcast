@@ -5,7 +5,7 @@ export type Language = 'en' | 'ar';
 export const translations = {
   en: {
     appTitle: "Rouh Podcast",
-    reset: "Reset Content",
+    reset: "Reset All Content",
     geminiModel: "Gemini 3 Pro",
     step: "Step",
     episode: "Episode",
@@ -36,6 +36,7 @@ export const translations = {
     exportSummary: "Export Summary",
     exportScript: "Export Script",
     exportAll: "Export All",
+    clearEpisode: "Clear Episode",
     
     rawSectionTitle: "Raw Previous Episode to Summary",
     orYoutube: "Or YouTube Link",
@@ -67,7 +68,8 @@ export const translations = {
     errScript: "Failed to refine script. Please check your API key and try again.",
     
     // Reset Confirm
-    resetConfirm: "Are you sure you want to clear all episode details, uploaded files, and generated outputs? Prompts will be preserved.",
+    resetConfirm: "Are you sure you want to clear ALL content (metadata, files, outputs) for ALL episodes?",
+    confirmClearEpisode: "Are you sure you want to clear all content for this episode?",
     
     step1Title: "Episode 1 Workflow",
     step2Title: "Episode 2 Workflow",
@@ -76,7 +78,7 @@ export const translations = {
   },
   ar: {
     appTitle: "بودكاست روح",
-    reset: "إعادة ضبط المحتوى",
+    reset: "إعادة ضبط الكل",
     geminiModel: "Gemini 3 Pro",
     step: "الخطوة",
     episode: "الحلقة",
@@ -107,6 +109,7 @@ export const translations = {
     exportSummary: "تصدير الملخص",
     exportScript: "تصدير السيناريو",
     exportAll: "تصدير الكل",
+    clearEpisode: "مسح الحلقة",
     
     rawSectionTitle: "تحويل الحلقة الخام السابقة إلى ملخص",
     orYoutube: "أو رابط يوتيوب",
@@ -138,7 +141,8 @@ export const translations = {
     errScript: "فشل تنقيح السيناريو. يرجى التحقق من مفتاح API والمحاولة مرة أخرى.",
     
     // Reset Confirm
-    resetConfirm: "هل أنت متأكد من رغبتك في مسح جميع تفاصيل الحلقات والملفات والمخرجات؟ سيتم الاحتفاظ بالتعليمات.",
+    resetConfirm: "هل أنت متأكد من مسح جميع المحتويات (البيانات، الملفات، المخرجات) لجميع الحلقات؟",
+    confirmClearEpisode: "هل أنت متأكد من مسح محتويات هذه الحلقة؟",
     
     step1Title: "سير عمل الحلقة 1",
     step2Title: "سير عمل الحلقة 2",
