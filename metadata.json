@@ -1,0 +1,5 @@
+{
+  "name": "Rouh Podcast",
+  "description": "A workflow tool to process raw episode content into summaries and refine scripts using Gemini, exporting everything to a Word document.",
+  "requestFramePermissions": []
+}
