@@ -1,10 +1,9 @@
 
-
 import React, { useState, useEffect } from 'react';
 import { EpisodeState, Language } from './types';
 import { EpisodeCard } from './components/EpisodeCard';
 import { generateAndDownloadDocx, generateSingleEpisodeDocx } from './utils/docxGenerator';
-import { FileDown, ChevronRight, ChevronLeft, CheckCircle2, FileText, Mic, Podcast, Globe } from 'lucide-react';
+import { FileDown, ChevronRight, ChevronLeft, CheckCircle2, FileText, Mic, Podcast, Globe, Moon, Sun } from 'lucide-react';
 import { translations } from './utils/translations';
 
 const MUSTAFA_PROMPT = `(برومبت المقدمة التحليلية - نسخة الدستور المحصّن v5.0 - قيادة مصطفى)
@@ -240,8 +239,26 @@ const STORAGE_KEY = 'podcast_workflow_episodes_v7';
 export default function App() {
   const [currentStep, setCurrentStep] = useState(1);
   const [lang, setLang] = useState<Language>('en');
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+        return localStorage.getItem('theme') === 'dark' ||
+               (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    }
+    return false;
+  });
+
   const t = translations[lang];
   const totalSteps = 4; // 3 Episodes + 1 Final Export
+
+  useEffect(() => {
+    if (darkMode) {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+    }
+  }, [darkMode]);
 
   // Load state from localStorage or fallback to INITIAL_STATE
   const [episodes, setEpisodes] = useState<EpisodeState[]>(() => {
@@ -413,6 +430,10 @@ export default function App() {
       setLang(prev => prev === 'en' ? 'ar' : 'en');
   };
 
+  const toggleDarkMode = () => {
+      setDarkMode(prev => !prev);
+  };
+
   const nextStep = () => setCurrentStep(prev => Math.min(prev + 1, totalSteps));
   const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
 
@@ -431,9 +452,9 @@ export default function App() {
   const ChevronPrev = lang === 'ar' ? ChevronRight : ChevronLeft;
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-24 font-sans" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-24 font-sans transition-colors duration-200" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
       {/* Header */}
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-20 shadow-sm">
+      <header className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-20 shadow-sm transition-colors duration-200">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-3 rtl:space-x-reverse">
             {/* Logo Icon */}
@@ -441,21 +462,38 @@ export default function App() {
                 <Mic className="w-7 h-7 text-white" />
             </div>
             <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                <h1 className="text-xl font-bold text-slate-900">{t.appTitle}</h1>
+                <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">{t.appTitle}</h1>
                 <Podcast className="w-6 h-6 text-slate-400" />
             </div>
           </div>
           <div className="flex items-center space-x-4 rtl:space-x-reverse">
+             <button
+               onClick={toggleDarkMode}
+               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 ${
+                 darkMode ? 'bg-blue-600' : 'bg-slate-200'
+               }`}
+               title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+             >
+               <span className="sr-only">Toggle dark mode</span>
+               <span
+                 className={`${
+                   darkMode ? 'translate-x-6' : 'translate-x-1'
+                 } inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 flex items-center justify-center`}
+               >
+                  {darkMode ? <Moon className="w-2.5 h-2.5 text-blue-600" /> : <Sun className="w-2.5 h-2.5 text-yellow-500" />}
+               </span>
+             </button>
+
              <button 
                 onClick={toggleLanguage}
-                className="flex items-center gap-1 text-xs font-medium text-slate-600 hover:text-blue-600 transition-colors bg-slate-100 px-3 py-1.5 rounded-full"
+                className="flex items-center gap-1 text-xs font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-full"
              >
                 <Globe className="w-3.5 h-3.5" />
                 <span>{lang === 'en' ? 'العربية' : 'English'}</span>
              </button>
              <button 
                 onClick={handleReset}
-                className="text-xs text-slate-500 hover:text-red-600 transition-colors"
+                className="text-xs text-slate-500 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
              >
                 {t.reset}
              </button>
@@ -469,26 +507,26 @@ export default function App() {
         {/* Step Indicator */}
         <div className="mb-10">
           <div className="flex items-center justify-between relative">
-             <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-full h-0.5 bg-slate-200 -z-10"></div>
+             <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-full h-0.5 bg-slate-200 dark:bg-slate-800 -z-10"></div>
              {[1, 2, 3, 4].map((step) => {
                 const status = getStepStatus(step);
-                let bgColor = 'bg-white border-slate-300 text-slate-500';
-                let borderColor = 'border-slate-300';
+                let bgColor = 'bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 text-slate-500 dark:text-slate-400';
+                let borderColor = 'border-slate-300 dark:border-slate-700';
                 
                 if (status === 'complete') {
-                    bgColor = 'bg-green-100 text-green-600 border-green-600';
-                    borderColor = 'border-green-600';
+                    bgColor = 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 border-green-600 dark:border-green-500';
+                    borderColor = 'border-green-600 dark:border-green-500';
                 } else if (status === 'active') {
-                    bgColor = 'bg-blue-600 text-white border-blue-600';
-                    borderColor = 'border-blue-600';
+                    bgColor = 'bg-blue-600 dark:bg-blue-600 text-white border-blue-600 dark:border-blue-600';
+                    borderColor = 'border-blue-600 dark:border-blue-600';
                 }
 
                 return (
-                    <div key={step} className="flex flex-col items-center bg-slate-50 px-2 cursor-pointer" onClick={() => setCurrentStep(step)}>
+                    <div key={step} className="flex flex-col items-center bg-slate-50 dark:bg-slate-950 px-2 cursor-pointer transition-colors duration-200" onClick={() => setCurrentStep(step)}>
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 font-bold text-sm transition-colors ${bgColor} ${borderColor}`}>
                             {status === 'complete' ? <CheckCircle2 className="w-5 h-5" /> : (step === 4 ? <FileDown className="w-4 h-4"/> : step)}
                         </div>
-                        <span className={`text-xs mt-2 font-medium ${status === 'active' ? 'text-blue-700' : 'text-slate-500'}`}>
+                        <span className={`text-xs mt-2 font-medium ${status === 'active' ? 'text-blue-700 dark:text-blue-400' : 'text-slate-500 dark:text-slate-500'}`}>
                             {step === 4 ? t.export : `${t.step} ${step}`}
                         </span>
                     </div>
@@ -503,10 +541,10 @@ export default function App() {
                 // Episodes 1, 2, 3
                 <div className="animate-in fade-in slide-in-from-right-4 rtl:slide-in-from-left-4 duration-300">
                     <div className="mb-4">
-                        <h2 className="text-2xl font-bold text-slate-900">
+                        <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
                             {currentStep === 1 ? t.step1Title : currentStep === 2 ? t.step2Title : t.step3Title}
                         </h2>
-                        <p className="text-slate-600">{t.stepDesc}</p>
+                        <p className="text-slate-600 dark:text-slate-400">{t.stepDesc}</p>
                     </div>
                     <EpisodeCard 
                         episode={episodes[currentStep - 1]} 
@@ -517,12 +555,12 @@ export default function App() {
             ) : (
                 // Step 4: Final Export Dashboard
                 <div className="animate-in fade-in slide-in-from-right-4 rtl:slide-in-from-left-4 duration-300">
-                    <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8 text-center mb-8">
-                        <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-8 text-center mb-8 transition-colors duration-200">
+                        <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center mx-auto mb-4">
                             <FileDown className="w-8 h-8" />
                         </div>
-                        <h2 className="text-3xl font-bold text-slate-900 mb-2">{t.readyToExport}</h2>
-                        <p className="text-slate-600 max-w-lg mx-auto">
+                        <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-2">{t.readyToExport}</h2>
+                        <p className="text-slate-600 dark:text-slate-400 max-w-lg mx-auto">
                            {t.readyToExportDesc}
                         </p>
                     </div>
@@ -533,23 +571,23 @@ export default function App() {
                             <button
                                 key={ep.id}
                                 onClick={() => generateSingleEpisodeDocx(ep, 'FULL')}
-                                className="flex items-center justify-center gap-3 p-4 bg-white border border-slate-200 rounded-xl shadow-sm hover:border-blue-400 hover:shadow-md transition-all group"
+                                className="flex items-center justify-center gap-3 p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm hover:border-blue-400 hover:shadow-md transition-all group"
                             >
-                                <div className="bg-blue-50 text-blue-600 p-2 rounded-lg group-hover:bg-blue-100 transition-colors">
+                                <div className="bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 p-2 rounded-lg group-hover:bg-blue-100 dark:group-hover:bg-blue-900/40 transition-colors">
                                     <FileText className="w-5 h-5" />
                                 </div>
                                 <div className="text-start">
-                                    <div className="text-sm font-bold text-slate-800">{t.episode} {ep.id}</div>
-                                    <div className="text-xs text-slate-500">{t.downloadDocx}</div>
+                                    <div className="text-sm font-bold text-slate-800 dark:text-slate-200">{t.episode} {ep.id}</div>
+                                    <div className="text-xs text-slate-500 dark:text-slate-400">{t.downloadDocx}</div>
                                 </div>
                             </button>
                         ))}
                         
                         <button
                             onClick={handleExport}
-                            className="flex items-center justify-center gap-3 p-4 bg-slate-900 border border-slate-900 rounded-xl shadow-sm hover:bg-slate-800 hover:shadow-md transition-all group"
+                            className="flex items-center justify-center gap-3 p-4 bg-slate-900 dark:bg-slate-800 border border-slate-900 dark:border-slate-700 rounded-xl shadow-sm hover:bg-slate-800 dark:hover:bg-slate-700 hover:shadow-md transition-all group"
                         >
-                            <div className="bg-slate-800 text-white p-2 rounded-lg group-hover:bg-slate-700 transition-colors">
+                            <div className="bg-slate-800 dark:bg-slate-900 text-white p-2 rounded-lg group-hover:bg-slate-700 dark:group-hover:bg-slate-800 transition-colors">
                                 <FileDown className="w-5 h-5" />
                             </div>
                             <div className="text-start">
@@ -559,40 +597,40 @@ export default function App() {
                         </button>
                     </div>
 
-                    <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                        <div className="p-6 border-b border-slate-100 bg-slate-50">
-                            <h3 className="font-bold text-slate-800">{t.workflowSummary}</h3>
+                    <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden transition-colors duration-200">
+                        <div className="p-6 border-b border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
+                            <h3 className="font-bold text-slate-800 dark:text-slate-200">{t.workflowSummary}</h3>
                         </div>
-                        <div className="divide-y divide-slate-100">
+                        <div className="divide-y divide-slate-100 dark:divide-slate-800">
                             {episodes.map((ep) => (
-                                <div key={ep.id} className="p-4 flex items-center justify-between hover:bg-slate-50 transition-colors">
+                                <div key={ep.id} className="p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
                                     <div className="flex items-center gap-4">
-                                        <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-xs">
+                                        <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 font-bold text-xs">
                                             {ep.id}
                                         </div>
                                         <div>
-                                            <h4 className="font-medium text-slate-900">
+                                            <h4 className="font-medium text-slate-900 dark:text-slate-100">
                                                 {ep.serialNumber ? `Ep ${ep.serialNumber}: ` : ''}{ep.title || `${t.episode} ${ep.id}`}
                                             </h4>
-                                            <span className="text-xs text-slate-500">{ep.date || t.noDate}</span>
+                                            <span className="text-xs text-slate-500 dark:text-slate-400">{ep.date || t.noDate}</span>
                                         </div>
                                     </div>
                                     <div className="flex gap-6">
                                         <div className="flex items-center gap-2">
-                                            <div className={`w-2 h-2 rounded-full ${ep.rawSummary ? 'bg-green-500' : 'bg-slate-300'}`}></div>
-                                            <span className={`text-sm ${ep.rawSummary ? 'text-slate-700' : 'text-slate-400 italic'}`}>
+                                            <div className={`w-2 h-2 rounded-full ${ep.rawSummary ? 'bg-green-500' : 'bg-slate-300 dark:bg-slate-700'}`}></div>
+                                            <span className={`text-sm ${ep.rawSummary ? 'text-slate-700 dark:text-slate-300' : 'text-slate-400 dark:text-slate-600 italic'}`}>
                                                 {ep.rawSummary ? t.summaryReady : t.noSummary}
                                             </span>
                                         </div>
                                         <div className="flex items-center gap-2">
-                                            <div className={`w-2 h-2 rounded-full ${ep.refinedScript ? 'bg-purple-500' : 'bg-slate-300'}`}></div>
-                                            <span className={`text-sm ${ep.refinedScript ? 'text-slate-700' : 'text-slate-400 italic'}`}>
+                                            <div className={`w-2 h-2 rounded-full ${ep.refinedScript ? 'bg-purple-500' : 'bg-slate-300 dark:bg-slate-700'}`}></div>
+                                            <span className={`text-sm ${ep.refinedScript ? 'text-slate-700 dark:text-slate-300' : 'text-slate-400 dark:text-slate-600 italic'}`}>
                                                 {ep.refinedScript ? t.scriptReady : t.noScript}
                                             </span>
                                         </div>
                                         <button 
                                             onClick={() => setCurrentStep(ep.id)}
-                                            className="text-xs text-blue-600 hover:text-blue-800 font-medium px-3 py-1 bg-blue-50 rounded hover:bg-blue-100"
+                                            className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium px-3 py-1 bg-blue-50 dark:bg-blue-900/30 rounded hover:bg-blue-100 dark:hover:bg-blue-900/50"
                                         >
                                             {t.edit}
                                         </button>
@@ -608,27 +646,27 @@ export default function App() {
       </main>
 
       {/* Navigation Footer */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 p-4 shadow-lg z-30">
+      <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 p-4 shadow-lg z-30 transition-colors duration-200">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
            
            <button 
              onClick={prevStep}
              disabled={currentStep === 1}
              className={`flex items-center space-x-2 rtl:space-x-reverse px-4 py-2 rounded-lg font-medium transition-colors
-                ${currentStep === 1 ? 'text-slate-300 cursor-not-allowed' : 'text-slate-600 hover:bg-slate-100'}`}
+                ${currentStep === 1 ? 'text-slate-300 dark:text-slate-700 cursor-not-allowed' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
            >
              <ChevronPrev className="w-5 h-5" />
              <span>{t.previous}</span>
            </button>
 
-           <div className="text-sm font-medium text-slate-400">
+           <div className="text-sm font-medium text-slate-400 dark:text-slate-500">
              {t.step} {currentStep} / {totalSteps}
            </div>
 
            {currentStep < totalSteps ? (
                <button 
                 onClick={nextStep}
-                className="flex items-center space-x-2 rtl:space-x-reverse bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors shadow-sm"
+                className="flex items-center space-x-2 rtl:space-x-reverse bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors shadow-sm"
                >
                  <span>{t.nextEpisode}</span>
                  <ChevronNext className="w-5 h-5" />
@@ -636,7 +674,7 @@ export default function App() {
            ) : (
                <button 
                 onClick={handleExport}
-                className="flex items-center space-x-2 rtl:space-x-reverse bg-slate-900 text-white px-8 py-2 rounded-lg font-medium hover:bg-slate-800 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                className="flex items-center space-x-2 rtl:space-x-reverse bg-slate-900 dark:bg-slate-800 text-white px-8 py-2 rounded-lg font-medium hover:bg-slate-800 dark:hover:bg-slate-700 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                >
                  <FileDown className="w-5 h-5" />
                  <span>{t.exportCombined}</span>

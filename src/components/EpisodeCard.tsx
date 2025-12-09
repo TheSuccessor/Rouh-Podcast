@@ -1,5 +1,4 @@
 
-
 import React, { useState } from 'react';
 import { EpisodeState, FileType, Language } from '../types';
 import { FileUploader } from './FileUploader';
@@ -108,19 +107,19 @@ export const EpisodeCard: React.FC<EpisodeCardProps> = ({ episode, onUpdate, lan
   const ChevronToggleSummary = isSummaryPromptOpen ? ChevronDown : (lang === 'ar' ? ChevronLeft : ChevronRight);
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-8">
+    <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden mb-8 transition-colors duration-200">
       {/* Header Section */}
-      <div className="bg-slate-50 px-6 py-4 border-b border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="bg-slate-50 dark:bg-slate-950 px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="flex items-center gap-3">
-            <h2 className="text-lg font-bold text-slate-800">{t.episode} {episode.id}</h2>
-            <div className="text-xs font-medium px-2 py-1 bg-slate-200 text-slate-600 rounded">
+            <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">{t.episode} {episode.id}</h2>
+            <div className="text-xs font-medium px-2 py-1 bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded">
             {t.workflow}
             </div>
         </div>
         <div className="flex gap-2 w-full sm:w-auto">
             <button 
                 onClick={() => generateSingleEpisodeDocx(episode, 'SUMMARY_ONLY')}
-                className="flex-1 sm:flex-none justify-center flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-green-700 bg-green-50 hover:bg-green-100 border border-green-200 rounded-md transition-colors"
+                className="flex-1 sm:flex-none justify-center flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/40 border border-green-200 dark:border-green-800 rounded-md transition-colors"
                 title={t.exportSummary}
             >
                 <FileText className="w-3.5 h-3.5" />
@@ -128,7 +127,7 @@ export const EpisodeCard: React.FC<EpisodeCardProps> = ({ episode, onUpdate, lan
             </button>
             <button 
                 onClick={() => generateSingleEpisodeDocx(episode, 'SCRIPT_ONLY')}
-                className="flex-1 sm:flex-none justify-center flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-purple-700 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-md transition-colors"
+                className="flex-1 sm:flex-none justify-center flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-purple-700 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/40 border border-purple-200 dark:border-purple-800 rounded-md transition-colors"
                 title={t.exportScript}
             >
                 <FileText className="w-3.5 h-3.5" />
@@ -136,16 +135,16 @@ export const EpisodeCard: React.FC<EpisodeCardProps> = ({ episode, onUpdate, lan
             </button>
             <button 
                 onClick={() => generateSingleEpisodeDocx(episode, 'FULL')}
-                className="flex-1 sm:flex-none justify-center flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-md transition-colors"
+                className="flex-1 sm:flex-none justify-center flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-md transition-colors"
                 title={t.exportAll}
             >
                 <FileDown className="w-3.5 h-3.5" />
                 <span>{t.exportAll}</span>
             </button>
-            <div className="w-px h-6 bg-slate-300 mx-1 self-center hidden sm:block"></div>
+            <div className="w-px h-6 bg-slate-300 dark:bg-slate-700 mx-1 self-center hidden sm:block"></div>
             <button 
                 onClick={handleClearEpisode}
-                className="flex-1 sm:flex-none justify-center flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 rounded-md transition-colors"
+                className="flex-1 sm:flex-none justify-center flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 border border-red-200 dark:border-red-800 rounded-md transition-colors"
                 title={t.clearEpisode}
             >
                 <Trash2 className="w-3.5 h-3.5" />
@@ -157,44 +156,44 @@ export const EpisodeCard: React.FC<EpisodeCardProps> = ({ episode, onUpdate, lan
       <div className="p-6 space-y-8">
         
         {/* Metadata Inputs */}
-        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 pb-6 border-b border-slate-100">
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 pb-6 border-b border-slate-100 dark:border-slate-800">
            <div className="sm:col-span-1">
-             <label className="block text-xs font-semibold text-slate-500 mb-1">{t.seriesName}</label>
+             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">{t.seriesName}</label>
              <input 
                type="text" 
                value={episode.seriesName}
                onChange={(e) => onUpdate(episode.id, { seriesName: e.target.value })}
                placeholder={t.seriesName}
-               className="w-full text-sm font-bold p-2 bg-slate-900 text-white border border-slate-700 placeholder-slate-500 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+               className="w-full text-sm font-bold p-2 bg-slate-900 dark:bg-slate-800 text-white border border-slate-700 dark:border-slate-600 placeholder-slate-500 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
              />
            </div>
            <div>
-             <label className="block text-xs font-semibold text-slate-500 mb-1">{t.serialNumber}</label>
+             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">{t.serialNumber}</label>
              <input 
                type="text" 
                value={episode.serialNumber}
                onChange={(e) => onUpdate(episode.id, { serialNumber: e.target.value })}
                placeholder="e.g. 05"
-               className="w-full text-sm font-bold p-2 bg-slate-900 text-white border border-slate-700 placeholder-slate-500 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+               className="w-full text-sm font-bold p-2 bg-slate-900 dark:bg-slate-800 text-white border border-slate-700 dark:border-slate-600 placeholder-slate-500 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
              />
            </div>
            <div className="sm:col-span-1">
-             <label className="block text-xs font-semibold text-slate-500 mb-1">{t.episodeTitle}</label>
+             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">{t.episodeTitle}</label>
              <input 
                type="text" 
                value={episode.title}
                onChange={(e) => onUpdate(episode.id, { title: e.target.value })}
                placeholder={t.episodeTitle}
-               className="w-full text-sm font-bold p-2 bg-slate-900 text-white border border-slate-700 placeholder-slate-500 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+               className="w-full text-sm font-bold p-2 bg-slate-900 dark:bg-slate-800 text-white border border-slate-700 dark:border-slate-600 placeholder-slate-500 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
              />
            </div>
            <div>
-             <label className="block text-xs font-semibold text-slate-500 mb-1">{t.date}</label>
+             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">{t.date}</label>
              <input 
                type="date" 
                value={episode.date}
                onChange={(e) => onUpdate(episode.id, { date: e.target.value })}
-               className="w-full text-sm font-bold p-2 bg-slate-900 text-white border border-slate-700 placeholder-slate-500 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+               className="w-full text-sm font-bold p-2 bg-slate-900 dark:bg-slate-800 text-white border border-slate-700 dark:border-slate-600 placeholder-slate-500 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
              />
            </div>
         </div>
@@ -203,8 +202,8 @@ export const EpisodeCard: React.FC<EpisodeCardProps> = ({ episode, onUpdate, lan
           {/* Left Column: Raw Episode -> Summary */}
           <div className="space-y-4">
               <div className="flex items-center gap-2 mb-2">
-                  <span className="flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-700 text-xs font-bold">1</span>
-                  <h3 className="font-semibold text-slate-800">{t.rawSectionTitle}</h3>
+                  <span className="flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 text-xs font-bold">1</span>
+                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">{t.rawSectionTitle}</h3>
               </div>
               
               {/* Input Group: Wrapper to match height with right side */}
@@ -227,7 +226,7 @@ export const EpisodeCard: React.FC<EpisodeCardProps> = ({ episode, onUpdate, lan
                 
                 {/* YouTube Link (Fixed height at bottom of input group) */}
                 <div>
-                   <label className="block text-sm font-medium text-slate-700 mb-1">{t.orYoutube}</label>
+                   <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t.orYoutube}</label>
                    <div className="relative">
                         <div className="absolute inset-y-0 left-0 rtl:left-auto rtl:right-0 pl-3 rtl:pl-0 rtl:pr-3 flex items-center pointer-events-none">
                             <Youtube className="h-5 w-5 text-red-500" />
@@ -237,7 +236,7 @@ export const EpisodeCard: React.FC<EpisodeCardProps> = ({ episode, onUpdate, lan
                             value={episode.youtubeLink}
                             onChange={(e) => onUpdate(episode.id, { youtubeLink: e.target.value })}
                             placeholder="https://youtube.com/watch?v=..."
-                            className="w-full pl-10 pr-3 rtl:pr-10 rtl:pl-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm text-start"
+                            className="w-full pl-10 pr-3 rtl:pr-10 rtl:pl-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm text-start bg-white dark:bg-slate-950 dark:text-white"
                         />
                    </div>
                 </div>
@@ -246,7 +245,7 @@ export const EpisodeCard: React.FC<EpisodeCardProps> = ({ episode, onUpdate, lan
               <div className="space-y-1">
                   <button 
                     onClick={() => setIsSummaryPromptOpen(!isSummaryPromptOpen)}
-                    className="flex items-center text-xs font-semibold text-slate-500 uppercase tracking-wider hover:text-slate-700 focus:outline-none transition-colors"
+                    className="flex items-center text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider hover:text-slate-700 dark:hover:text-slate-300 focus:outline-none transition-colors"
                   >
                       <ChevronToggleSummary className="w-4 h-4 mr-1 rtl:mr-0 rtl:ml-1" />
                       <MessageSquare className="w-3 h-3 mr-1 rtl:mr-0 rtl:ml-1" />
@@ -256,7 +255,7 @@ export const EpisodeCard: React.FC<EpisodeCardProps> = ({ episode, onUpdate, lan
                     <textarea
                         value={episode.summaryPrompt}
                         onChange={(e) => onUpdate(episode.id, { summaryPrompt: e.target.value })}
-                        className="w-full h-64 p-2 text-xs text-slate-600 border border-slate-200 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-transparent bg-slate-50 resize-y"
+                        className="w-full h-64 p-2 text-xs text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-transparent bg-slate-50 dark:bg-slate-950 resize-y"
                     />
                   )}
               </div>
@@ -266,7 +265,7 @@ export const EpisodeCard: React.FC<EpisodeCardProps> = ({ episode, onUpdate, lan
                   disabled={isSummaryDisabled()}
                   className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all
                       ${isSummaryDisabled()
-                          ? 'bg-slate-100 text-slate-400 cursor-not-allowed' 
+                          ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed' 
                           : 'bg-blue-600 text-white hover:bg-blue-700 shadow-md hover:shadow-lg'}`}
               >
                   {episode.isProcessingSummary ? (
@@ -283,19 +282,19 @@ export const EpisodeCard: React.FC<EpisodeCardProps> = ({ episode, onUpdate, lan
               </button>
 
               {episode.summaryError && (
-                   <div className="flex items-start gap-2 text-sm text-red-600 bg-red-50 p-3 rounded-md">
+                   <div className="flex items-start gap-2 text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 p-3 rounded-md">
                       <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
                       <span>{episode.summaryError}</span>
                    </div>
               )}
 
               <div className="space-y-1">
-                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">{t.outputSummary}</label>
+                  <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t.outputSummary}</label>
                   <textarea
                       value={episode.rawSummary}
                       onChange={(e) => onUpdate(episode.id, { rawSummary: e.target.value })}
                       placeholder={t.summaryPlaceholder}
-                      className="w-full h-32 p-3 text-sm text-slate-700 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-slate-50 resize-y"
+                      className="w-full h-32 p-3 text-sm text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-slate-50 dark:bg-slate-950 resize-y"
                   />
               </div>
           </div>
@@ -303,8 +302,8 @@ export const EpisodeCard: React.FC<EpisodeCardProps> = ({ episode, onUpdate, lan
           {/* Right Column: Script -> Refinement */}
           <div className="space-y-4">
               <div className="flex items-center gap-2 mb-2">
-                  <span className="flex items-center justify-center w-6 h-6 rounded-full bg-purple-100 text-purple-700 text-xs font-bold">2</span>
-                  <h3 className="font-semibold text-slate-800">{t.scriptSectionTitle}</h3>
+                  <span className="flex items-center justify-center w-6 h-6 rounded-full bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 text-xs font-bold">2</span>
+                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">{t.scriptSectionTitle}</h3>
               </div>
 
               {/* Input Group: Matches height of Left Input Group */}
@@ -328,7 +327,7 @@ export const EpisodeCard: React.FC<EpisodeCardProps> = ({ episode, onUpdate, lan
               <div className="space-y-1">
                   <button 
                     onClick={() => setIsScriptPromptOpen(!isScriptPromptOpen)}
-                    className="flex items-center text-xs font-semibold text-slate-500 uppercase tracking-wider hover:text-slate-700 focus:outline-none transition-colors"
+                    className="flex items-center text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider hover:text-slate-700 dark:hover:text-slate-300 focus:outline-none transition-colors"
                   >
                       <ChevronToggleScript className="w-4 h-4 mr-1 rtl:mr-0 rtl:ml-1" />
                       <MessageSquare className="w-3 h-3 mr-1 rtl:mr-0 rtl:ml-1" />
@@ -338,7 +337,7 @@ export const EpisodeCard: React.FC<EpisodeCardProps> = ({ episode, onUpdate, lan
                     <textarea
                         value={episode.scriptPrompt}
                         onChange={(e) => onUpdate(episode.id, { scriptPrompt: e.target.value })}
-                        className="w-full h-64 p-2 text-xs text-slate-600 border border-slate-200 rounded-lg focus:ring-1 focus:ring-purple-500 focus:border-transparent bg-slate-50 resize-y"
+                        className="w-full h-64 p-2 text-xs text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-1 focus:ring-purple-500 focus:border-transparent bg-slate-50 dark:bg-slate-950 resize-y"
                     />
                   )}
               </div>
@@ -348,7 +347,7 @@ export const EpisodeCard: React.FC<EpisodeCardProps> = ({ episode, onUpdate, lan
                   disabled={isScriptDisabled()}
                   className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all
                       ${isScriptDisabled()
-                          ? 'bg-slate-100 text-slate-400 cursor-not-allowed' 
+                          ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed' 
                           : 'bg-purple-600 text-white hover:bg-purple-700 shadow-md hover:shadow-lg'}`}
               >
                   {episode.isProcessingScript ? (
@@ -365,19 +364,19 @@ export const EpisodeCard: React.FC<EpisodeCardProps> = ({ episode, onUpdate, lan
               </button>
 
               {episode.scriptError && (
-                   <div className="flex items-start gap-2 text-sm text-red-600 bg-red-50 p-3 rounded-md">
+                   <div className="flex items-start gap-2 text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 p-3 rounded-md">
                       <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
                       <span>{episode.scriptError}</span>
                    </div>
               )}
 
               <div className="space-y-1">
-                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">{t.outputScript}</label>
+                  <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t.outputScript}</label>
                   <textarea
                       value={episode.refinedScript}
                       onChange={(e) => onUpdate(episode.id, { refinedScript: e.target.value })}
                       placeholder={t.scriptPlaceholder}
-                      className="w-full h-32 p-3 text-sm text-slate-700 border border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-slate-50 resize-y"
+                      className="w-full h-32 p-3 text-sm text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-slate-50 dark:bg-slate-950 resize-y"
                   />
               </div>
           </div>
